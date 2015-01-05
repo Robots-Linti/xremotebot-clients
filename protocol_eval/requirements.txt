@@ -1,0 +1,5 @@
+six
+docopt
+chrono
+bson
+cbor
