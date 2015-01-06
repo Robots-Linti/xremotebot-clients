@@ -75,6 +75,8 @@ def main(**kwargs):
 
     for i in range(repeat):
         raw = run('{}_dump'.format(serialization), data, avgs)
+
+    for i in range(repeat):
         run('{}_load'.format(serialization), raw, avgs)
 
     print('-' * 78)

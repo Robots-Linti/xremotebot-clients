@@ -1,0 +1,17 @@
+{
+  "name": "protocol_eval",
+  "version": "1.0.0",
+  "description": "",
+  "main": "benchmark.js",
+  "dependencies": {
+    "bson": "^0.2.16",
+    "cbor": "git://github.com/paroga/cbor-js.git",
+    "docopt": "^0.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
