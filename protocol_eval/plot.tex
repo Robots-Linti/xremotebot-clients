@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\usepackage{filecontents}
+
+\begin{document}
+\foreach \l in {py, js} {
+	
+\begin{tikzpicture}
+\begin{axis}[ %height=15cm,
+			 %width=15cm,
+			 scaled x ticks = false, % No usar notación exponencial
+			 xlabel=Cantidad de entradas,
+			 ylabel=Segundos,
+			 x tick label style={/pgf/number format/fixed, rotate=45, anchor=north east}, % Las etiquetas son números y rotar 45°
+			 xtick=data, % Generar una etiqueta por punto en los datos
+			 ylabel near ticks, % Poner las etiquetas más o menos cerca de algunos datos
+			 ymin=0, % No hay tiempos negativos
+			 xmin=1024, % La escala empieza en 1024
+			 legend style={legend pos=north west}, % Cuadro de leyendas a la derecha arriba
+			 every axis x label/.style={
+			 	at={(axis description cs:0.5,-0.2)}, % Desplazar la descripción del eje x
+			 	anchor=north, % El desplazamiento relativo a la parte superior del texto
+			 },
+			 legend cell align=left, % Alineación del texto en la caja de leyendas
+]
+	\foreach \s in {json, bson, cbor} {
+		\addlegendentryexpanded{\s\ dump}
+		\addplot table [x=entries, y=dump_time, col sep=comma] {\l-\s.csv};
+
+		\addlegendentryexpanded{\s\ load}
+		\addplot table [x=entries, y=load_time, col sep=comma] {\l-\s.csv};
+	}
+\end{axis}
+\end{tikzpicture}
+}
+
+\begin{tikzpicture}
+\begin{axis}[%height=15cm,
+			 %width=15cm,
+			 scaled x ticks = false,
+			 xlabel=Cantidad de entradas,
+			 ylabel=Tamaño en MiB,
+			 x tick label style={/pgf/number format/fixed, rotate=45, anchor=north east},
+			 xtick=data,
+			 ylabel near ticks,
+			 ymin=0,
+			 xmin=1024,
+			 legend style={legend pos=north west},
+			 every axis x label/.style={
+	 			 	at={(axis description cs:0.5,-0.2)},
+	 			 	anchor=north,
+			 },
+			 legend cell align=left,
+]
+\foreach \s in {json, bson, cbor} {
+	\addlegendentryexpanded{\s}
+	\addplot table [x=entries, y=serialized_size, col sep=comma] {js-\s.csv};
+	
+}
+\end{axis}
+\end{tikzpicture}
+\end{document}
