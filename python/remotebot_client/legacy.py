@@ -105,7 +105,7 @@ class Robot(object):
         return self.board.command(self, u'ping')
 
 if __name__ == '__main__':
-    server = Server('192.168.0.13', 8000)
+    server = Server('localhost', 8000)
     print(server.boards())
     board = Board(server, server.boards()[0])
     robot = Robot(board, 0)
