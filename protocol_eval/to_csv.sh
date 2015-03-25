@@ -12,7 +12,7 @@ files=$(echo "$*" | sed -r 's/ /\n/g' | sort -V)
 # Las entradas serán
 # entries, serialized_size, dump_time, load_time
 
-rm -i *.csv || true
+rm -f *.csv
 
 for f in $files; do
     lang=$(echo "$f" | cut -d- -f1)
