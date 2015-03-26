@@ -1,6 +1,7 @@
 import json
 import time
 import websocket
+import ssl
 
 wait = time.sleep
 
@@ -10,8 +11,7 @@ if str is not bytes:
     unicode = str
 
 class Server(object):
-    def __init__(self, url, ignore_ssl = False):
-        self.session = requests.Session()
+    def __init__(self, url, api_key, ignore_ssl = False):
         self.url= url
         if ignore_ssl:
             self.ws = websocket.create_connection(url)
@@ -21,16 +21,20 @@ class Server(object):
                 sslopt={"cert_reqs": ssl.CERT_NONE}
             )
 
+        if self.authentication_required():
+            self.authenticate(api_key)
+
     def send_ws_msg(self, entity, method, *args):
         msg = json.dumps({
             'entity': entity,
             'method': method,
             'args': args,
         })
-        self.ws.send(response)
+        self.ws.send(msg)
         response = json.loads(self.ws.recv())
+        print(response) # FIXME
         if response['response'] == 'error':
-            raise Exception(response['error'])
+            raise Exception(response['message'])
 
         return response['value']
 
@@ -111,10 +115,9 @@ class Robot(object):
         return self.send_ws_msg('getObstacle', *args)
 
 if __name__ == '__main__':
-    server = Server('localhost', 8000)
-    print(server.boards())
-    board = Board(server, server.boards()[0])
-    robot = Robot(board, 0)
+    server = Server('ws://xremotebot.example:8000/api', 'api_key')
+    print(server.get_robots())
+    robot = server.fetch_robot()
     robot.forward(100)
     wait(1)
     robot.stop()
