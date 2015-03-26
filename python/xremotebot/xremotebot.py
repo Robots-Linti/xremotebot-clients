@@ -22,7 +22,8 @@ class Server(object):
             )
 
         if self.authentication_required():
-            self.authenticate(api_key)
+            if not self.authenticate(api_key):
+                raise Exception('Authentication failed')
 
     def send_ws_msg(self, entity, method, *args):
         msg = json.dumps({
@@ -30,6 +31,7 @@ class Server(object):
             'method': method,
             'args': args,
         })
+        print(msg) # FIXME
         self.ws.send(msg)
         response = json.loads(self.ws.recv())
         print(response) # FIXME
@@ -42,7 +44,7 @@ class Server(object):
         return self.send_ws_msg('global', 'authentication_required')
 
     def authenticate(self, api_key):
-        return self.send_ws_msg('global', 'authentication_required')
+        return self.send_ws_msg('global', 'authenticate', api_key)
 
     def get_robots(self):
         return self.send_ws_msg('global', 'get_robots')
@@ -115,7 +117,7 @@ class Robot(object):
         return self.send_ws_msg('getObstacle', *args)
 
 if __name__ == '__main__':
-    server = Server('ws://xremotebot.example:8000/api', 'api_key')
+    server = Server('ws://xremotebot.example:8000/api', '33dfb770-b3d2-49da-81f2-745af2c643f1')
     print(server.get_robots())
     robot = server.fetch_robot()
     robot.forward(100)
