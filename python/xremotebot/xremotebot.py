@@ -5,14 +5,14 @@ import ssl
 
 wait = time.sleep
 
-
-
 if str is not bytes:
     unicode = str
 
+
 class Server(object):
-    def __init__(self, url, api_key, ignore_ssl = False):
-        self.url= url
+
+    def __init__(self, url, api_key, ignore_ssl=False):
+        self.url = url
         if ignore_ssl:
             self.ws = websocket.create_connection(url)
         else:
@@ -73,21 +73,25 @@ def timed(delayed_func, time_index=2):
         return _f
     return _timed
 
+
 def _stop_robot(s):
     s.stop()
 
+
 class Robot(object):
-    def __init__(self, server, robot_model, robot_id):
+    def __init__(self, server, robot_obj):
         self.server = server
-        self.robot_model = robot_model
-        self.robot_id = robot_id
+        self.robot_model = robot_obj['robot_model']
+        self.robot_id = robot_obj['robot_id']
 
     def send_ws_msg(self, msg, *args):
         self.server.send_ws_msg(
             'robot',
             msg,
-            self.robot_model,
-            self.robot_id,
+            {
+                'robot_model': self.robot_model,
+                'robot_id': self.robot_id,
+            },
             *args
         )
 
@@ -108,19 +112,25 @@ class Robot(object):
         self.send_ws_msg('turnRight', speed)
 
     def stop(self):
-        self.send_ws_msg('stop', speed)
+        self.send_ws_msg('stop')
 
     def ping(self):
-        return self.send_ws_msg('ping', speed)
+        return self.send_ws_msg('ping')
+
+    def getLine(self):
+        return self.send_ws_msg('getLine')
 
     def getObstacle(self, *args):
         return self.send_ws_msg('getObstacle', *args)
 
 if __name__ == '__main__':
-    server = Server('ws://xremotebot.example:8000/api', '33dfb770-b3d2-49da-81f2-745af2c643f1')
+    api_key = raw_input('api_key: ')
+    server = Server('ws://xremotebot.example:8000/api', api_key)
     print(server.get_robots())
-    robot = server.fetch_robot()
+    robot = Robot(server, server.fetch_robot())
     robot.forward(100)
     wait(1)
     robot.stop()
     robot.turnRight(100, 2)
+    print(robot.getObstacle())
+    print(robot.getLine())
