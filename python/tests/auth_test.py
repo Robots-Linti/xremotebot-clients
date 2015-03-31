@@ -12,7 +12,7 @@ def auth(msg):
 
 class AuthTest(unittest.TestCase):
     def setUp(self):
-        server = Remotebot('localhost', api_key='asd', WSMockBase)
+        server = Remotebot('localhost', api_key='asd', wsbase=WSMockBase)
 
     def test_api_key_required_by_server(self):
         WSMockBase.action = lambda x: '{"response": "authentication_required"}'

@@ -99,12 +99,13 @@ class WebSocket
 
         write(
           "GET #{@path} HTTP/1.1\r\n" +
-          "Upgrade: WebSocket\r\n" +
+          "Upgrade: websocket\r\n" +
           "Connection: Upgrade\r\n" +
           "Host: #{host}\r\n" +
           "Origin: #{origin}\r\n" +
           "Sec-WebSocket-Key1: #{key1}\r\n" +
           "Sec-WebSocket-Key2: #{key2}\r\n" +
+          "Sec-WebSocket-Version: 13\r\n" +
           "\r\n" +
           "#{key3}")
         flush()

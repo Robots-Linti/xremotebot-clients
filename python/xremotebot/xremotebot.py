@@ -11,15 +11,18 @@ if str is not bytes:
 
 class Server(object):
 
-    def __init__(self, url, api_key, ignore_ssl=False):
+    def __init__(self, url, api_key, wsbase=None, ignore_ssl=False):
         self.url = url
-        if ignore_ssl:
-            self.ws = websocket.create_connection(url)
+        if wsbase is not None:
+            self.ws = wsbase()
         else:
-            self.ws = websocket.create_connection(
-                url,
-                sslopt={"cert_reqs": ssl.CERT_NONE}
-            )
+            if ignore_ssl:
+                self.ws = websocket.create_connection(url)
+            else:
+                self.ws = websocket.create_connection(
+                    url,
+                    sslopt={"cert_reqs": ssl.CERT_NONE}
+                )
 
         if self.authentication_required():
             if not self.authenticate(api_key):
