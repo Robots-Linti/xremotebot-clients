@@ -1,6 +1,4 @@
 require 'xremotebot/version'
-#require 'xremotebot/web_socket'
-#require 'xremotebot/ws_cli'
 require 'websocket'
 require 'json'
 
