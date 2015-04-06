@@ -34,10 +34,8 @@ class Server(object):
             'method': method,
             'args': args,
         })
-        print(msg) # FIXME
         self.ws.send(msg)
         response = json.loads(self.ws.recv())
-        print(response) # FIXME
         if response['response'] == 'error':
             raise Exception(response['message'])
 
@@ -54,6 +52,13 @@ class Server(object):
 
     def fetch_robot(self):
         return self.send_ws_msg('global', 'fetch_robot')
+
+    def reserve(self, robot_model, robot_id):
+        return self.send_ws_msg('global',
+                                'reserve',
+                                'robot_model',
+                                'robot_id')
+
 
 
 def timed(delayed_func, time_index=2):
@@ -88,7 +93,7 @@ class Robot(object):
         self.robot_id = robot_obj['robot_id']
 
     def send_ws_msg(self, msg, *args):
-        self.server.send_ws_msg(
+        return self.server.send_ws_msg(
             'robot',
             msg,
             {
