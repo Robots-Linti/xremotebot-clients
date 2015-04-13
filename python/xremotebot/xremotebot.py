@@ -53,6 +53,13 @@ class Server(object):
     def fetch_robot(self):
         return self.send_ws_msg('global', 'fetch_robot')
 
+    def reserve(self, robot_model, robot_id):
+        return self.send_ws_msg('global',
+                                'reserve',
+                                'robot_model',
+                                'robot_id')
+
+
 
 def timed(delayed_func, time_index=2):
     def _timed(wrapped_func):
