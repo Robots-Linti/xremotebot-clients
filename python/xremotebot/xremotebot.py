@@ -62,11 +62,21 @@ class Server(object):
 
 
 def timed(delayed_func, time_index=2):
+    """
+    Esta función toma como argumento una función que debe ejecutarse luego de
+    un tiempo
+    y opcionalmente un número que indica cúal es el argumento de la función
+    decorada de la cuál se debe tomar el tiempo de demora.
+
+    Retorna un decorador que extrae el argumento de tiempo de la lista de
+    argumentos e invoca a la función decorada con el resto de los argumentos.
+    Al finalizar el tiempo de demora ejecuta a la función demorada.
+    """
     def _timed(wrapped_func):
         def _f(self, *args, **kwargs):
             _f.__name__ = wrapped_func.__name__ + '_wrapped'
             _f.__doc__ = wrapped_func.__doc__
-            time = None
+            time = -1
             args = list(args)
             if len(args) == time_index:
                 time = args.pop()
@@ -74,7 +84,7 @@ def timed(delayed_func, time_index=2):
                 time = kwargs.pop('time')
 
             wrapped_func(self, *args, **kwargs)
-            if time is not None:
+            if time >= 0:
                 wait(time)
                 delayed_func(self)
 
