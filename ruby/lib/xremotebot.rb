@@ -81,6 +81,10 @@ module XRemoteBot
     def fetch_robot
       send_ws_msg 'global', 'fetch_robot'
     end
+
+    def reserve(robot_model, robot_id)
+      send_ws_msg 'global', 'reserve', robot_model, robot_id
+    end
   end
 
   class Robot

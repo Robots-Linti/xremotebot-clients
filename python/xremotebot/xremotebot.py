@@ -56,8 +56,8 @@ class Server(object):
     def reserve(self, robot_model, robot_id):
         return self.send_ws_msg('global',
                                 'reserve',
-                                'robot_model',
-                                'robot_id')
+                                robot_model,
+                                robot_id)
 
 
 
