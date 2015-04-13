@@ -49,8 +49,8 @@ module XRemoteBot
     attr_reader :ws
     def initialize(host, port, path, api_key)
       @ws = WS.new(host, port, path)
-      if send_ws_msg('global', 'authentication_required')
-        send_ws_msg('global', 'authenticate', api_key)
+      if authentication_required 
+        raise Exception, 'Authentication failed' unless authenticate(api_key)
       end
     end
 
@@ -70,8 +70,8 @@ module XRemoteBot
       send_ws_msg 'global', 'authentication_required'
     end
 
-    def authenticate
-      send_ws_msg 'global', 'authenticate'
+    def authenticate(api_key)
+      send_ws_msg 'global', 'authenticate', api_key
     end
 
     def get_robots
@@ -94,8 +94,8 @@ module XRemoteBot
       @server.send_ws_msg('robot',
                           msg,
                           {
-                            'robot_model': @robot_model,
-                            'robot_id': @robot_id,
+                            robot_model: @robot_model,
+                            robot_id: @robot_id,
                           },
                           *args)
     end
@@ -116,11 +116,11 @@ module XRemoteBot
       move('turnRight', speed, time)
     end
 
-    def stop
+    def stop()
       send_ws_msg 'stop'
     end
 
-    def ping
+    def ping()
       send_ws_msg 'ping'
     end
 
@@ -135,7 +135,7 @@ module XRemoteBot
     private
     def move(direction, speed=50, time=-1)
       timed(time, self, :stop) do
-        send_ws_msg(direction, 100)
+        send_ws_msg(direction, speed)
       end
     end
 
