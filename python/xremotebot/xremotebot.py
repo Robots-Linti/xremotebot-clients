@@ -12,7 +12,7 @@ if str is not bytes:
 
 class Server(object):
 
-    def __init__(self, url, api_key, wsbase=None, ignore_ssl=False):
+    def __init__(self, url, api_key='', wsbase=None, ignore_ssl=False):
         self.url = url
         if wsbase is not None:
             self.ws = wsbase()
