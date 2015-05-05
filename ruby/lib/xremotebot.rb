@@ -1,5 +1,6 @@
 require 'xremotebot/version'
 require 'websocket'
+require 'socket'
 require 'json'
 
 module XRemoteBot

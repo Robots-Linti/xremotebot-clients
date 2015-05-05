@@ -3,7 +3,7 @@
 
 from distutils.core import setup
 
-setup(name='xremotebot-clients',
+setup(name='xremotebot',
       version='1.0',
       description='XRemoteBot official Python client',
       author='Fernando López',
